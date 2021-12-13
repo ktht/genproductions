@@ -317,7 +317,12 @@ make_gridpack () {
       fi
     
        #*FIXME* workaround for broken set cluster_queue and run_mode handling
-       if [ "$queue" != "condor" ]; then
+       if [ "$queue" == "slurm" ]; then
+         echo "cluster_queue = main" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
+         if [ "$isscratchspace" -gt "0" ]; then
+             echo "cluster_temp_path = `echo $RUNHOME`" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
+         fi
+       elif [ "$queue" != "condor" ]; then
          echo "cluster_queue = $queue" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
          if [ "$isscratchspace" -gt "0" ]; then
              echo "cluster_temp_path = `echo $RUNHOME`" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
@@ -399,11 +404,11 @@ make_gridpack () {
     if [ -d gridpack ]; then
       rm -rf gridpack
     fi
-    
+
     if [ -d processtmp ]; then
       rm -rf processtmp
     fi
-    
+
     if [ -d process ]; then
       rm -rf process
     fi
