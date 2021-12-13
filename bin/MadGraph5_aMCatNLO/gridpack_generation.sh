@@ -211,7 +211,7 @@ make_gridpack () {
           elif [ "$queue" == "condor_spool" ]; then
             echo "set cluster_type cms_condor_spool" >> mgconfigscript
             echo "set cluster_queue None" >> mgconfigscript
-          elif [ "$queue" == "condor_spool" ]; then
+          elif [ "$queue" == "slurm" ]; then
             echo "set cluster_type slurm" >> mgconfigscript
             echo "set cluster_queue main" >> mgconfigscript
           else
