@@ -224,7 +224,7 @@ make_gridpack () {
     	  long_wait=300
     	  short_wait=120
           else
-    	  n_retries=3
+    	  n_retries=10
     	  long_wait=60
     	  short_wait=30
           fi
@@ -319,9 +319,7 @@ make_gridpack () {
        #*FIXME* workaround for broken set cluster_queue and run_mode handling
        if [ "$queue" == "slurm" ]; then
          echo "cluster_queue = main" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
-         if [ "$isscratchspace" -gt "0" ]; then
-             echo "cluster_temp_path = `echo $RUNHOME`" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
-         fi
+         echo "cluster_temp_path = /scratch/$USER" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
        elif [ "$queue" != "condor" ]; then
          echo "cluster_queue = $queue" >> ./$MGBASEDIRORIG/input/mg5_configuration.txt
          if [ "$isscratchspace" -gt "0" ]; then
@@ -556,7 +554,12 @@ make_gridpack () {
     
     #   set +e
       cat makegrid.dat | ./bin/generate_events pilotrun
-      echo "finished pilot run"
+      EXIT_CODE=$?
+      echo "finished pilot run with exit code: $EXIT_CODE"
+      if [ "$EXIT_CODE" -gt 0 ]; then
+        echo "exiting ...";
+        exit 1;
+      fi
     
       cd $WORKDIR
       
