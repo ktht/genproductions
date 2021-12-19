@@ -121,6 +121,10 @@ if [ ! -d ${AFS_GEN_FOLDER}/${name}_gridpack ]; then
   export SCRAM_ARCH=slc6_amd64_gcc481
   export RELEASE=CMSSW_7_1_20_patch3
 
+  export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+  set +u
+  source $VO_CMS_SW_DIR/cmsset_default.sh
+  set -u
 
   ############################
   #Create a workplace to work#
